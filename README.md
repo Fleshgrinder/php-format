@@ -1,3 +1,12 @@
+[![Latest Stable Version](https://poser.pugx.org/fleshgrinder/format/v/stable)](https://packagist.org/packages/fleshgrinder/format)
+[![License](https://poser.pugx.org/fleshgrinder/format/license)](https://packagist.org/packages/fleshgrinder/format)
+[![Travis CI build status](https://img.shields.io/travis/Fleshgrinder/php-format.svg)](https://travis-ci.org/Fleshgrinder/php-format)
+[![AppVeyor CI build status](https://ci.appveyor.com/api/projects/status/36pbndq2e739llp1/branch/master?svg=true)](https://ci.appveyor.com/project/Fleshgrinder/php-format/branch/master)
+
+[![Coveralls branch](https://img.shields.io/coveralls/Fleshgrinder/php-format/master.svg)](https://coveralls.io/github/Fleshgrinder/php-format)
+[![Scrutinizer](https://img.shields.io/scrutinizer/g/Fleshgrinder/php-format.svg)](https://scrutinizer-ci.com/g/Fleshgrinder/php-format/)
+[![Code Climate: GPA](https://img.shields.io/codeclimate/github/Fleshgrinder/php-format.svg)](https://codeclimate.com/github/Fleshgrinder/php-format)
+[![Total Downloads](https://poser.pugx.org/fleshgrinder/format/downloads)](https://packagist.org/packages/fleshgrinder/format)
 # Formatter
 The **formatter** library provides the functionality to format special string
  patterns. The implementation is similar to [`sprintf`](https://php.net/sprintf)
