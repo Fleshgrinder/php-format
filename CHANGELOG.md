@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this
 
 ## [Unreleased][unreleased]
 
-## 1.0.0 - 2017-03-09
+## 1.0.0 - 2017-03-12
 - Initial Release
 
 [unreleased]: https://github.com/Fleshgrinder/php-pattern-formatter/compare/1.0.0...HEAD
