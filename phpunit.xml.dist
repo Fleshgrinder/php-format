@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/5.7/phpunit.xsd"
+	backupGlobals="false"
+	backupStaticAttributes="false"
+	beStrictAboutChangesToGlobalState="true"
+	beStrictAboutCoversAnnotation="true"
+	beStrictAboutOutputDuringTests="true"
+	beStrictAboutResourceUsageDuringSmallTests="true"
+	beStrictAboutTestsThatDoNotTestAnything="true"
+	beStrictAboutTodoAnnotatedTests="true"
+	bootstrap="vendor/autoload.php"
+	cacheTokens="true"
+	checkForUnintentionallyCoveredCode="true"
+	convertErrorsToExceptions="true"
+	convertNoticesToExceptions="true"
+	convertWarningsToExceptions="true"
+	failOnRisky="false"
+	failOnWarning="false"
+	forceCoversAnnotation="true"
+	processIsolation="false"
+	stopOnError="false"
+	stopOnFailure="false"
+	stopOnIncomplete="false"
+	stopOnRisky="false"
+	stopOnSkipped="false"
+	stopOnWarning="false">
+
+	<filter>
+		<whitelist processUncoveredFilesFromWhitelist="true">
+			<directory>src</directory>
+		</whitelist>
+	</filter>
+
+	<php>
+		<ini name="assert.active" value="1"/>
+		<ini name="assert.bail" value="0"/>
+		<ini name="assert.callback" value="0"/>
+		<ini name="assert.quiet_eval" value="0"/>
+		<ini name="assert.warning" value="1"/>
+		<ini name="error_reporting" value="32767"/>
+		<ini name="memory_limit" value="-1"/>
+	</php>
+
+	<logging>
+		<log type="coverage-clover" target="build/logs/clover.xml"/>
+	</logging>
+
+	<testsuites>
+		<testsuite name="unit_tests">
+			<directory suffix="Test.php">tests</directory>
+		</testsuite>
+	</testsuites>
+
+</phpunit>

@@ -1,0 +1,28 @@
+engines:
+  duplication:
+    enabled: true
+    config:
+      languages:
+        - php
+  phpcodesniffer:
+    enabled: true
+    config:
+      file_extensions: php
+      standard: PSR1
+  phpmd:
+    enabled: true
+    config:
+      file_extensions: php
+      rulesets: "cleancode,codesize,controversial,design,naming,unusedcode"
+    checks:
+      CleanCode/StaticAccess:
+        enabled: false
+      Controversial/CamelCaseParameterName:
+        enabled: false
+      Controversial/CamelCasePropertyName:
+        enabled: false
+      Controversial/CamelCaseVariableName:
+        enabled: false
+ratings:
+  paths:
+    - "**.php"

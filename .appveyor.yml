@@ -1,0 +1,50 @@
+build: false
+platform: x64
+clone_folder: C:\Projects\Fleshgrinder\PHP-Formatter
+
+branches:
+  only:
+    - master
+
+cache:
+  - '%LOCALAPPDATA%\Composer\files -> composer.lock'
+
+clone_depth: 1
+
+environment:
+  global:
+    PATH: '%PHP_DIR%;%APPVEYOR_BUILD_FOLDER%\vendor\bin;%PATH%'
+    PHP_DIR: C:\tools\php
+    XDEBUG_VERSION: 2.5.0
+  matrix:
+    - PHP_VERSION: 7.0
+      XDEBUG_VC_VERSION: 14
+    - PHP_VERSION: 7.1
+      XDEBUG_VC_VERSION: 14
+
+matrix:
+  fast_finish: true
+
+pull_requests:
+  do_not_increment_build_number: true
+
+install:
+  - ps: appveyor-retry cinst --allow-empty-checksums --params "/InstallDir:$Env:PHP_DIR" --limit-output --yes php --version ((choco search php --exact --all-versions -r | select-string -pattern $Env:PHP_VERSION | Select-Object -first 1) -replace '[php|]','')
+  - CD %PHP_DIR%
+  - COPY /Y php.ini-development php.ini
+  - ECHO data.timezone="UTC" >> php.ini
+  - ECHO extension_dir=ext >> php.ini
+  - ECHO extension=php_curl.dll >> php.ini
+  - ECHO extension=php_mbstring.dll >> php.ini
+  - ECHO extension=php_openssl.dll >> php.ini
+  - appveyor-retry appveyor DownloadFile https://getcomposer.org/composer.phar
+  - CD %APPVEYOR_BUILD_FOLDER%
+  - php %PHP_DIR%\composer.phar update --classmap-authoritative --no-interaction --no-progress --no-suggest --prefer-dist
+  - ECHO extension=php_xdebug-%XDEBUG_VERSION%-%PHP_VERSION%-vc%XDEBUG_VC_VERSION%-nts-x86_64.dll >> php.ini
+  - CD %PHP_DIR%\ext
+  - appveyor-retry appveyor DownloadFile https://xdebug.org/files/php_xdebug-%XDEBUG_VERSION%-%PHP_VERSION%-vc%XDEBUG_VC_VERSION%-nts-x86_64.dll
+
+test_script:
+  - CD %APPVEYOR_BUILD_FOLDER%
+  - ./bin/readme-test
+  - phpunit --no-coverage

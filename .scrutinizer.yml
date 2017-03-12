@@ -1,0 +1,15 @@
+filter:
+  excluded_paths:
+    - vendor/*
+
+checks:
+  php: true
+
+build:
+    environment:
+        php: 7.1.0
+
+tools:
+  external_code_coverage:
+    timeout: 600
+    runs: 1
