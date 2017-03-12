@@ -46,5 +46,5 @@ install:
 
 test_script:
   - CD %APPVEYOR_BUILD_FOLDER%
-  - ./bin/readme-test
+  - php bin/readme-test
   - phpunit --no-coverage
