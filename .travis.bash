@@ -6,6 +6,7 @@ cd ~/bin
 
 if [ ! -f ocular ]; then
 	curl -L -o ocular -s https://scrutinizer-ci.com/ocular.phar
+	chmod +x ocular
 fi
 
 if [ ! -d test-reporter ]; then
@@ -20,6 +21,7 @@ fi
 
 if [ ! -f coveralls ]; then
 	curl -L -o coveralls -s https://github.com/satooshi/php-coveralls/releases/download/v1.0.1/coveralls.phar
+	chmod +x coveralls
 fi
 
 cd "${CWD}"
