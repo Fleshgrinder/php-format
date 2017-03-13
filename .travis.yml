@@ -26,6 +26,7 @@ sudo: false
 cache:
   directories:
     - $HOME/.composer/cache
+    - $HOME/bin
 
 install:
   - composer update --classmap-authoritative --no-interaction --no-progress --no-suggest --prefer-dist
@@ -35,6 +36,4 @@ script:
   - ./bin/readme-test
   - coverage && phpunit || phpunit --no-coverage
 after_success:
-  - coverage && travis_retry ocular code-coverage:upload --format=php-clover build/logs/clover.xml
-  - coverage && travis_retry test-reporter --no-interaction
-  - coverage && travis_retry coveralls --no-interaction
+  - coverage && ./.travis.bash
