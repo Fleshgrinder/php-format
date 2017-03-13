@@ -15,7 +15,7 @@ if [ ! -d test-reporter ]; then
 	cd test-reporter-src
 	composer install --no-dev --prefer-dist --quiet
 	cd ..
-	ln -s test-reporter ~/bin/test-reporter-src/composer/bin/test-reporter
+	ln -s ~/bin/test-reporter-src/composer/bin/test-reporter test-reporter
 fi
 
 if [ ! -f coveralls ]; then
