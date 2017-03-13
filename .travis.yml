@@ -8,7 +8,7 @@ php:
 env:
   global:
     - COVERAGE_VERSION=7.1
-    - PATH=$TRAVIS_BUILD_DIR/vendor/bin:$PATH
+    - PATH=$TRAVIS_BUILD_DIR/vendor/bin:$HOME/bin:$PATH
 
 matrix:
   allow_failures:
