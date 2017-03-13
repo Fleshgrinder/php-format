@@ -29,7 +29,7 @@ pull_requests:
   do_not_increment_build_number: true
 
 install:
-  - ps: appveyor-retry cinst --allow-empty-checksums --params "/InstallDir:$Env:PHP_DIR" --limit-output --yes php --version ((choco search php --exact --all-versions -r | select-string -pattern $Env:PHP_VERSION | Select-Object -first 1) -replace '[php|]','')
+  - ps: cinst --allow-empty-checksums --params "/InstallDir:$Env:PHP_DIR" --limit-output --yes php --version ((choco search php --exact --all-versions -r | select-string -pattern $Env:PHP_VERSION | Select-Object -first 1) -replace '[php|]','')
   - CD %PHP_DIR%
   - COPY /Y php.ini-development php.ini
   - ECHO data.timezone="UTC" >> php.ini
