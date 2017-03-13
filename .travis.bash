@@ -24,6 +24,6 @@ fi
 
 cd "${CWD}"
 
-php ocular code-coverage:upload --format=php-clover build/logs/clover.xml
-php test-reporter --no-interaction
-php coveralls.phar --no-interaction
+ocular code-coverage:upload --format=php-clover build/logs/clover.xml
+test-reporter --no-interaction
+coveralls --no-interaction
