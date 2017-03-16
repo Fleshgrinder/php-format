@@ -15,7 +15,7 @@ environment:
   global:
     PATH: '%PHP_DIR%;%APPVEYOR_BUILD_FOLDER%\vendor\bin;%PATH%'
     PHP_DIR: C:\tools\php
-    XDEBUG_VERSION: 2.5.0
+    XDEBUG_VERSION: 2.5.1
   matrix:
     - PHP_VERSION: 7.0
       XDEBUG_VC_VERSION: 14
@@ -46,5 +46,4 @@ install:
 
 test_script:
   - CD %APPVEYOR_BUILD_FOLDER%
-  - php bin/readme-test
   - phpunit --no-coverage

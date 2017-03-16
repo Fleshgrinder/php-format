@@ -33,7 +33,6 @@ install:
 before_script:
   - function coverage() { test $TRAVIS_PHP_VERSION = $COVERAGE_VERSION; }
 script:
-  - ./bin/readme-test
   - coverage && phpunit || phpunit --no-coverage
 after_success:
   - coverage && ./.travis.bash
