@@ -24,5 +24,6 @@ test-70:
 	php70x $(TEST_CMD) --no-coverage
 
 test-71:
+	rm -fr build/
 	php71x -v
 	php71x $(TEST_CMD) --coverage-html build/logs/coverage
