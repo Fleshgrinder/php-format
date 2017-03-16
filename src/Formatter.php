@@ -16,7 +16,8 @@ use Fleshgrinder\Core\Formatter\MissingPlaceholderException;
  * The **pattern** utility class can be used to format special pattern, refer
  * to the documentation for more information.
  *
- * @see https://github.com/fleshgrinder/php-message-formatter/blob/master/README.md Documentation
+ * @see https://github.com/fleshgrinder/php-message-formatter/blob/master/README.md
+ *     Documentation
  */
 final class Formatter {
 	use Unconstructable;
@@ -26,7 +27,8 @@ final class Formatter {
 	 * with their corresponding argument values. Refer to the library
 	 * documentation for more information.
 	 *
-	 * @see https://github.com/fleshgrinder/php-message-formatter/blob/master/README.md Documentation
+	 * @see https://github.com/fleshgrinder/php-message-formatter/blob/master/README.md
+	 *     Documentation
 	 * @param $pattern
 	 *     The pattern that specifies the formatting which should be applied,
 	 *     see examples for more information.
@@ -43,27 +45,32 @@ final class Formatter {
 	 *     if a placeholder in the pattern is missing from the arguments.
 	 */
 	public static function format(string $pattern, array $arguments): string {
-		$message = \preg_replace_callback(
-			/* @lang RegExp */ '/(?<!\[)\[((?:[^\[\]]|(?R))+)](?!])/',
-			static function ($matches) use ($arguments) {
-				if (\preg_match_all(/* @lang RegExp */ '@(?<!\{)\{\+?([a-z\d_-]+)(?:}}|[^}])*}\?(?!})@i', $matches[1], $placeholders)) {
-					/** @noinspection ForeachSourceInspection */
-					foreach ($placeholders[1] as $placeholder) {
-						if (empty($arguments[$placeholder])) {
-							return '';
+		if (\strpos($pattern, '[') !== \false) {
+			$pattern = \preg_replace_callback(
+			/* @lang RegExp */
+				'/(?<!\[)\[((?:[^\[\]]|(?R))+)](?!])/',
+				static function ($matches) use ($arguments) {
+					if (\preg_match_all(/* @lang RegExp */
+						'@(?<!\{)\{\+?([a-z\d_-]+)(?:}}|[^}])*}\?(?!})@i', $matches[1], $placeholders)) {
+						/** @noinspection ForeachSourceInspection */
+						foreach ($placeholders[1] as $placeholder) {
+							if (empty($arguments[$placeholder])) {
+								return '';
+							}
 						}
+
+						return $matches[1];
 					}
 
-					return $matches[1];
-				}
+					return '';
+				},
+				$pattern
+			);
+		}
 
-				return '';
-			},
-			$pattern
-		);
-
-		$message = \preg_replace_callback(
-			/* @lang RegExp */ '@(?<!\{)\{(\+)?([A-Za-z\d_-]*)(?:\.([1-9]\d*))?(?:#([beox]))?(?::((?:}}|[^}])+))?}\??(?!})@',
+		$pattern = \preg_replace_callback(
+		/* @lang RegExp */
+			'@(?<!\{)\{(\+)?([A-Za-z\d_-]*)(?:\.([1-9]\d*))?(?:#([bceopx]))?(?::((?:}}|[^}])+))?}\??(?!})@',
 			static function ($matches) use ($arguments) {
 				static $counter = 0;
 
@@ -84,10 +91,10 @@ final class Formatter {
 
 				throw MissingPlaceholderException::new($placeholder, $arguments);
 			},
-			$message
+			$pattern
 		);
 
-		return \str_replace(['{{', '}}', '[[', ']]'], ['{', '}', '[', ']'], $message);
+		return \str_replace(['{{', '}}', '[[', ']]'], ['{', '}', '[', ']'], $pattern);
 	}
 
 	/** @noinspection MoreThanThreeArgumentsInspection */
@@ -111,7 +118,7 @@ final class Formatter {
 		}
 
 		if (\is_string($arg)) {
-			return $arg;
+			return self::formatString(Value::TYPE_STRING, $arg, $format);
 		}
 
 		if (\is_array($arg)) {
@@ -123,48 +130,28 @@ final class Formatter {
 		}
 
 		if (\is_float($arg) || \is_int($arg)) {
-			if ($format) {
-				if ($format === 'e') {
-					$pattern = '%';
-					$sign && $pattern .= '+';
-					$decimals > 0 && $pattern .= ".{$decimals}";
-
-					return \sprintf("{$pattern}e", $arg);
-				}
-
-				$formats = [
-					'b' => '0b%b',
-					'o' => '0o%o',
-					'x' => '0x%X',
-				];
-
-				if (isset($formats[$format])) {
-					return \sprintf($formats[$format], $arg);
-				}
-			}
-
-			return ($sign && $arg >= 0 ? '+' : '') . \number_format($arg, $decimals);
+			return self::formatNumber($arg, $sign, $decimals, $format);
 		}
 
 		if (\is_object($arg)) {
-			if (\method_exists($arg, '__toString')) {
-				return (string) $arg;
+			if (\method_exists($arg, 'toString')) {
+				return self::formatString(\get_class($arg), $arg->toString(), $format);
 			}
 
-			if (\method_exists($arg, 'toString')) {
-				return $arg->toString();
+			if (\method_exists($arg, 'toInt')) {
+				return self::formatNumber($arg->toInt(), $sign, $decimals, $format);
+			}
+
+			if (\method_exists($arg, 'toFloat')) {
+				return self::formatNumber($arg->toFloat(), $sign, $decimals, $format);
+			}
+
+			if (\method_exists($arg, '__toString')) {
+				return self::formatString(\get_class($arg), (string) $arg, $format);
 			}
 
 			if ($arg instanceof \Traversable) {
 				return self::formatArrayArg(\get_class($arg), \iterator_to_array($arg, \false), $sign, $decimals, $format, $conjunction);
-			}
-
-			if (\method_exists($arg, 'toInt')) {
-				return self::formatArg($arg->toInt(), $sign, $decimals, $format, $conjunction);
-			}
-
-			if (\method_exists($arg, 'toFloat')) {
-				return self::formatArg($arg->toFloat(), $sign, $decimals, $format, $conjunction);
 			}
 		}
 
@@ -203,5 +190,73 @@ final class Formatter {
 		return $conjunction === ''
 			? "{$list}{$last}"
 			: "{$list}{$conjunction} {$last}";
+	}
+
+	/** @noinspection MoreThanThreeArgumentsInspection */
+	/** @param float|int $arg */
+	private static function formatNumber($arg, bool $sign, int $decimals, string $format): string {
+		if ($format) {
+			if ($format === 'e') {
+				$pattern = '%';
+				$sign && $pattern .= '+';
+				$decimals > 0 && $pattern .= ".{$decimals}";
+
+				return \sprintf("{$pattern}e", $arg);
+			}
+
+			$formats = [
+				'b' => '0b%b',
+				'o' => '0o%o',
+				'x' => '0x%X',
+			];
+
+			if (isset($formats[$format])) {
+				return \sprintf($formats[$format], $arg);
+			}
+		}
+
+		return ($sign && $arg >= 0 ? '+' : '') . \number_format($arg, $decimals);
+	}
+
+	private static function formatString(string $type, string $arg, string $format): string {
+		if ($arg === '') {
+			return "empty {$type}";
+		}
+
+		if ($format) {
+			if ($format === 'c') {
+				return self::formatControlChars($arg, '^?', static function (int $ord): string {
+					return '^' . \chr($ord + 64);
+				});
+			}
+
+			if ($format === 'p') {
+				return self::formatControlChars($arg, '␡', static function (int $ord): string {
+					return \html_entity_decode('&#' . ($ord + 9216) . ';', 0, 'UTF-8');
+				});
+			}
+		}
+
+		return $arg;
+	}
+
+	private static function formatControlChars(string $string, string $del, callable $cc): string {
+		$result = '';
+
+		for ($i = 0, $bytes = \strlen($string); $i < $bytes; ++$i) {
+			$ord = \ord($string{$i});
+
+			if (0 <= $ord && $ord <= 31) {
+				$result .= $cc($ord);
+			}
+			elseif ($ord === 127) {
+				$result .= $del;
+			}
+			else {
+				$result .= $string{$i};
+			}
+		}
+
+		return $result;
 	}
 }
