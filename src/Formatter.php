@@ -16,7 +16,7 @@ use Fleshgrinder\Core\Formatter\MissingPlaceholderException;
  * The **pattern** utility class can be used to format special pattern, refer
  * to the documentation for more information.
  *
- * @see https://github.com/fleshgrinder/php-message-formatter/blob/master/README.md
+ * @see https://github.com/fleshgrinder/php-format/blob/master/README.md
  *     Documentation
  */
 final class Formatter {
@@ -27,7 +27,7 @@ final class Formatter {
 	 * with their corresponding argument values. Refer to the library
 	 * documentation for more information.
 	 *
-	 * @see https://github.com/fleshgrinder/php-message-formatter/blob/master/README.md
+	 * @see https://github.com/fleshgrinder/php-format/blob/master/README.md
 	 *     Documentation
 	 * @param $pattern
 	 *     The pattern that specifies the formatting which should be applied,

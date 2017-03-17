@@ -1,6 +1,6 @@
 build: false
 platform: x64
-clone_folder: C:\Projects\Fleshgrinder\PHP-Formatter
+clone_folder: C:\Projects\Fleshgrinder\PHP-Format
 
 branches:
   only:

@@ -7,8 +7,8 @@
 [![Scrutinizer](https://img.shields.io/scrutinizer/g/Fleshgrinder/php-format.svg)](https://scrutinizer-ci.com/g/Fleshgrinder/php-format/)
 [![Code Climate: GPA](https://img.shields.io/codeclimate/github/Fleshgrinder/php-format.svg)](https://codeclimate.com/github/Fleshgrinder/php-format)
 [![Total Downloads](https://poser.pugx.org/fleshgrinder/format/downloads)](https://packagist.org/packages/fleshgrinder/format)
-# Formatter
-The **formatter** library provides the functionality to format special string
+# Format
+The **format** library provides the functionality to format special string
 patterns. The implementation is similar to [`sprintf`](https://php.net/sprintf)
 and [`msgfmt_format_message`](https://php.net/messageformatter.formatmessage)
 but with various unique and very useful features.
